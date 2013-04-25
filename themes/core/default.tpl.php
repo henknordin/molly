@@ -8,6 +8,9 @@
 <body>
 	<div id="wrap-header">
 		<div id="header">
+			<div id='login-menu'>
+				<?=login_menu()?>
+			</div>
 				<?=$header?>
 		</div>
 	</div>

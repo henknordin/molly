@@ -42,6 +42,15 @@ $my->config['url_type'] = 1;
 */
 $my->config['base_url'] = null;
 
+/**
+* How to hash password of new users, choose from: plain, md5salt, md5, sha1salt, sha1.
+*/
+$my->config['hashing_algorithm'] = 'sha1salt';
+
+/**
+* Allow or disallow creation of new user accounts.
+*/
+$my->config['create_new_users'] = true;
 
 /**
 * Define session name
@@ -78,9 +87,11 @@ $my->config['language'] = 'en';
 * which is called in the frontcontroller phase from index.php.
 */
 $my->config['controllers'] = array(
-  'index' => array('enabled' => true,'class' => 'CCIndex'),
+  'index' 		=> array('enabled' => true,'class' => 'CCIndex'),
   'developer' => array('enabled' => true,'class' => 'CCDeveloper'),
   'guestbook' => array('enabled' => true,'class' => 'CCGuestbook'),
+  'user'      => array('enabled' => true,'class' => 'CCUser'),
+  'acp'       => array('enabled' => true,'class' => 'CCAdminControlPanel'),
 );
 
 /**
