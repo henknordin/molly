@@ -141,7 +141,7 @@ class CMolly implements ISingleton
 					if(!isset($this->config['theme']))
 					{
 							return;
-					} 
+					}
     
 					// Get the paths and settings for the theme
 					$themeName = $this->config['theme']['name'];
@@ -149,7 +149,7 @@ class CMolly implements ISingleton
 					$themeUrl	= $this->request->base_url . "themes/{$themeName}";
     
 					// Add stylesheet path to the $ly->data array
-					$this->data['stylesheet'] = "{$themeUrl}/".$this->config['theme']['stylesheet'];
+					$this->data['stylesheet'] = "{$themeUrl}/style.css";
 
 					// Include the global functions.php and the functions.php that are part of the theme
 					$my = &$this;
@@ -163,11 +163,6 @@ class CMolly implements ISingleton
 					// Extract $my->data to own variables and handover to the template file
 					extract($this->data);
 					extract($this->views->GetData());
-					if(isset($this->config['theme']['data']))
-					{
-							extract($this->config['theme']['data']);
-					}
-					$templateFile = (isset($this->config['theme']['template_file'])) ? $this->config['theme']['template_file'] : 'default.tpl.php';
-					include("{$themePath}/{$templateFile}");
+					include("{$themePath}/default.tpl.php");
 			}
 }

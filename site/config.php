@@ -17,8 +17,8 @@ ini_set('display_errors', 1);
 $my->config['debug']['molly'] = false;
 $my->config['debug']['session'] = false;
 $my->config['debug']['timer'] = true;
-$my->config['debug']['db-num-queries'] = false;
-$my->config['debug']['db-queries'] = false;
+$my->config['debug']['db-num-queries'] = true;
+$my->config['debug']['db-queries'] = true;
 
 
 /**
@@ -89,7 +89,6 @@ $my->config['language'] = 'en';
 $my->config['controllers'] = array(
   'index' 		=> array('enabled' => true,'class' => 'CCIndex'),
   'developer' => array('enabled' => true,'class' => 'CCDeveloper'),
-  'theme'     => array('enabled' => true,'class' => 'CCTheme'), 
   'guestbook' => array('enabled' => true,'class' => 'CCGuestbook'),
   'content'   => array('enabled' => true,'class' => 'CCContent'),
   'blog'      => array('enabled' => true,'class' => 'CCBlog'),
@@ -103,23 +102,5 @@ $my->config['controllers'] = array(
 */
 $my->config['theme'] = array(
   // The name of the theme in the theme directory
-  'name' 					=> 'grid', 					// Name of the theme in the theme directory
-  'stylesheet' 		=> 'style.php', 		// Main stylesheet to include in template files
-  'template_file' => 'index.tpl.php', // Default template file, else use default.tpl.php
-  // A list of valid theme regions
-  'regions' => array('flash','featured-first','featured-middle','featured-last',
-    'primary','sidebar','triptych-first','triptych-middle','triptych-last',
-    'footer-column-one','footer-column-two','footer-column-three','footer-column-four',
-    'footer',
-    ),
-  // Add static entries for use in the template file.
-  'data' => array(
-    'header' 	=> 'MOLLY',
-    'slogan' 	=> 'A PHP-based MVC-inspired CMF',
-    //'favicon' => 'logo_80x80.png',
-    //'logo' 		=> 'logo_80x80.png',
-    //'logo_width' 	=> 80,
-    //'logo_height' => 80,
-    'footer' => '<p>&copy; Molly by Henrik Nordin</p>'
-  ),
+  'name' => 'core',
 );

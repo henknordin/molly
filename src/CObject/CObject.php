@@ -96,7 +96,7 @@ class CObject
 		* @param $message string the message.
 		* @param $alternative string the message if the $type is set to false, defaults to null.
 		*/
-		protected function AddMessage($type, $message, $alternative=null)
+		public function AddMessage($type, $message, $alternative=null)
 		{
 				if($type === false)
 				{
