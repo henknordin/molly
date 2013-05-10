@@ -3,7 +3,16 @@
 * Helpers for theming, available for all themes in their template files and functions.php.
 * This file is included right before the themes own functions.php
 */
- 
+
+/**
+* Get list of tools.
+*/
+/**function get_tools()
+{
+		global $my;
+		//Add tools
+}*/
+
 /**
 * Print debuginformation from the framework.
 */
@@ -116,7 +125,8 @@ function esc($str)
 */
 function filter_data($data, $filter)
 {
-  return CTextFilter::Filter($data, array($filter));
+		$ctfilter = new CTextFilter();
+		return $ctfilter->Filter($data, array($filter));
 }
 
 /**
@@ -169,8 +179,20 @@ function current_url()
 
 /**
 * Render all views.
+*
+* @param $region string the region to draw the content in.
 */
-function render_views()
+function render_views($region='default')
 {
-		return CMolly::Instance()->views->Render();
+		return CMolly::Instance()->views->Render($region);
+}
+
+/**
+* Check if region has views. Accepts variable amount of arguments as regions.
+*
+* @param $region string the region to draw the content in.
+*/
+function region_has_content($region='default' /*...*/)
+{
+		return CMolly::Instance()->views->RegionHasView(func_get_args());
 }
