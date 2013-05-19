@@ -42,10 +42,10 @@ class CCUser extends CObject implements IController
 
 				$this->views->SetTitle('User Profile')
                 		->AddInclude(__DIR__ . '/profile.tpl.php', array(
-                  'is_authenticated'=>$this->user['isAuthenticated'],
-                  'user'=>$this->user,
-                  'profile_form'=>$form->GetHTML(),
-                ));
+                				'is_authenticated'=>$this->user['isAuthenticated'],
+                				'user'=>$this->user,
+                				'profile_form'=>$form->GetHTML(),
+                				));
 		}
 		
 		/**

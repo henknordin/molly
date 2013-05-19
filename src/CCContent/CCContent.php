@@ -67,10 +67,10 @@ class CCContent extends CObject implements IController
     /**
     * Init the content database.
     */
-    public function Init()
+    /*public function Init()
     {
     		$content = new CMContent();
     		$content->Init();
     		$this->RedirectToController();
-    }
+    }*/
 } 

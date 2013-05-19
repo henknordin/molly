@@ -6,7 +6,6 @@
 <p>Create new content.</p>
 <?php endif; ?>
 
-
 <?=$form->GetHTML(array('class'=>'content-edit'))?>
 
 <p class='smaller-text'><em>

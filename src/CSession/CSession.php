@@ -23,6 +23,8 @@ class CSession
 
 		/**
 		* Set values
+		* @param $key key.
+		* @param $value value.
 		*/
 		public function __set($key, $value)
 		{
@@ -31,6 +33,7 @@ class CSession
 
 		/**
 		* Get values
+		* @return value
 		*/
 		public function __get($key)
 		{
@@ -57,6 +60,8 @@ class CSession
 
 		/**
 		* Set flash values, to be remembered one page request
+		* @param $key key.
+		* @param $value value.
 		*/
 		public function SetFlash($key, $value)
 		{
@@ -86,7 +91,7 @@ class CSession
 		/**
 		* Get messages, if any. Each message is composed of a key and value. Use the key for styling.
 		*
-		* @returns array of messages. Each array-item contains a key and value.
+		* @return array of messages. Each array-item contains a key and value.
 		*/
 		public function GetMessages()
 		{

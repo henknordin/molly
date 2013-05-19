@@ -10,22 +10,19 @@
 error_reporting(-1);
 ini_set('display_errors', 1);
 
-
 /**
 * Set what to show as debug or developer information in the get_debug() theme helper.
 */
-$my->config['debug']['molly'] = false;
-$my->config['debug']['session'] = false;
-$my->config['debug']['timer'] = true;
+$my->config['debug']['molly'] 				 = false;
+$my->config['debug']['session'] 			 = false;
+$my->config['debug']['timer'] 				 = true;
 $my->config['debug']['db-num-queries'] = false;
-$my->config['debug']['db-queries'] = false;
-
+$my->config['debug']['db-queries'] 		 = false;
 
 /**
 * Set database(s).
 */
 $my->config['database'][0]['dsn'] = 'sqlite:' . MOLLY_SITE_PATH . '/data/.ht.sqlite';
-
 
 /**
 * What type of urls should be used?
@@ -35,7 +32,6 @@ $my->config['database'][0]['dsn'] = 'sqlite:' . MOLLY_SITE_PATH . '/data/.ht.sql
 * querystring = 2 => index.php?q=controller/method/arg1/arg2/arg3
 */
 $my->config['url_type'] = 1;
-
 
 /**
 * Set a base_url to use another than the default calculated
@@ -56,26 +52,22 @@ $my->config['create_new_users'] = true;
 * Define session name
 */
 $my->config['session_name'] = preg_replace('/[:\.\/-_]/', '', $_SERVER["SERVER_NAME"]);
-$my->config['session_key'] = 'molly';
-
+$my->config['session_key'] 	= 'molly';
 
 /**
 * Define default server timezone when displaying date and times to the user. All internals are still UTC.
 */
 $my->config['timezone'] = 'Europe/Stockholm';
 
-
 /**
 * Define internal character encoding
 */
 $my->config['character_encoding'] = 'UTF-8';
 
-
 /**
 * Define language
 */
 $my->config['language'] = 'en';
-
 
 /**
 * Define the controllers, their classname and enable/disable them.
@@ -96,22 +88,77 @@ $my->config['controllers'] = array(
   'page'      => array('enabled' => true,'class' => 'CCPage'), 
   'user'      => array('enabled' => true,'class' => 'CCUser'),
   'acp'       => array('enabled' => true,'class' => 'CCAdminControlPanel'),
+  'module'   	=> array('enabled' => true,'class' => 'CCModules'),
+  'my'        => array('enabled' => true,'class' => 'CCMyController'),
 );
 
 /**
-* Settings for the theme.
+* Define a routing table for urls.
+*
+* Route custom urls to a defined controller/method/arguments
+*/
+$my->config['routing'] = array(
+  'home' => array('enabled' => true, 'url' => 'index/index'),
+);
+
+/**
+* Define menus.
+*
+* Create hardcoded menus and map them to a theme region through $my->config['theme'].
+*/
+$my->config['menus'] = array(
+		'navbar' => array(
+				'home'      => array('url'=>''),
+				'modules'   => array('url'=>'module'),
+				'content'   => array('url'=>'content'),
+				'guestbook' => array('url'=>'guestbook'),
+				'blog'      => array('url'=>'blog'),
+				),
+  	'my-navbar' => array(
+  			'home'      => array('label'=>'About Me', 'url'=>'my'),
+  			'blog'      => array('label'=>'My Blog', 'url'=>'my/blog'),
+  			'guestbook' => array('label'=>'Guestbook', 'url'=>'my/guestbook'),
+  ), 
+);
+
+/**
+* Settings for the theme. The theme may have a parent theme.
+*
+* When a parent theme is used the parent's functions.php will be included before the current
+* theme's functions.php. The parent stylesheet can be included in the current stylesheet
+* by an @import clause. See site/themes/mytheme for an example of a child/parent theme.
+* Template files can reside in the parent or current theme, the CMolly::ThemeEngineRender()
+* looks for the template-file in the current theme first, then it looks in the parent theme.
+*
+* There are two useful theme helpers defined in themes/functions.php.
+* theme_url($url): Prepends the current theme url to $url to make an absolute url.
+* theme_parent_url($url): Prepends the parent theme url to $url to make an absolute url.
+*
+* path: Path to current theme, relativly MOLLY_INSTALL_PATH, for example themes/grid or site/themes/mytheme.
+* parent: Path to parent theme, same structure as 'path'. Can be left out or set to null.
+* stylesheet: The stylesheet to include, always part of the current theme, use @import to include the parent stylesheet.
+* template_file: Set the default template file, defaults to default.tpl.php.
+* regions: Array with all regions that the theme supports.
+* menu_to_region: Array mapping menus to regions.
+* data: Array with data that is made available to the template file as variables.
+*
+* The name of the stylesheet is also appended to the data-array, as 'stylesheet' and made
+* available to the template files.
 */
 $my->config['theme'] = array(
-  // The name of the theme in the theme directory
-  'name' 					=> 'grid', 					// Name of the theme in the theme directory
-  'stylesheet' 		=> 'style.php', 		// Main stylesheet to include in template files
-  'template_file' => 'index.tpl.php', // Default template file, else use default.tpl.php
-  // A list of valid theme regions
-  'regions' => array('flash','featured-first','featured-middle','featured-last',
-    'primary','sidebar','triptych-first','triptych-middle','triptych-last',
-    'footer-column-one','footer-column-two','footer-column-three','footer-column-four',
-    'footer',
+		'path' 					=> 'site/themes/mytheme',
+		//'path' 					=> 'themes/grid',
+  	'parent'				=> 'themes/grid',
+  	'stylesheet' 		=> 'style.css',
+  	'template_file' => 'index.tpl.php',
+  	'regions' 			=> array('navbar', 'flash','featured-first','featured-middle','featured-last',
+  			'primary','sidebar','triptych-first','triptych-middle','triptych-last',
+  			'footer-column-one','footer-column-two','footer-column-three','footer-column-four',
+  			'footer',
     ),
+  
+  'menu_to_region' => array('my-navbar'=>'navbar'),
+  
   // Add static entries for use in the template file.
   'data' => array(
     'header' 	=> 'MOLLY',
@@ -123,3 +170,5 @@ $my->config['theme'] = array(
     'footer' => '<p>&copy; Molly by Henrik Nordin</p>'
   ),
 );
+
+

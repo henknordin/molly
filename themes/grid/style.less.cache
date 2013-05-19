@@ -1,4 +1,4 @@
-a:4:{s:4:"root";s:10:"style.less";s:8:"compiled";s:8585:"html,
+a:4:{s:4:"root";s:10:"style.less";s:8:"compiled";s:9401:"html,
 body,
 div,
 span,
@@ -315,6 +315,10 @@ label {
 .form-action-link {
   font-size: smaller;
 }
+textarea {
+  width: 100%;
+  height: 8em;
+}
 .content-edit input[type=text] {
   width: 30em;
 }
@@ -324,6 +328,8 @@ label {
 }
 html {
   background-color: #000099;
+  overflow: -moz-scrollbars-vertical;
+  overflow-y: scroll;
 }
 body {
   margin: 0;
@@ -332,8 +338,7 @@ body {
   background-color: #fff;
 }
 #outer-wrap-header {
-  height: 88px;
-  margin-top: 11px;
+  padding-top: 11px;
   margin-bottom: 11px;
 }
 #inner-wrap-header {
@@ -354,7 +359,6 @@ body {
   float: left;
   width: 940px;
   margin: 0 10px;
-  border-bottom: 4px double #C31014;
 }
 #login-menu {
   float: right;
@@ -398,6 +402,33 @@ body {
   font-size: 1em;
   font-style: italic;
   padding-left: 10px;
+}
+#navbar ul.menu {
+  list-style-type: none;
+  padding: 7.33333333333px;
+  margin: 7.33333333333px;
+  border-bottom: 4px double #C31014;
+  border-top: 4px double #C31014;
+}
+#navbar ul.menu li {
+  padding: 0;
+  margin: 0;
+  display: inline;
+}
+#navbar ul.menu li a {
+  padding: 7.33333333333px;
+  text-decoration: none;
+  border: 2px solid transparent;
+}
+#navbar ul.menu li a:hover {
+  background: #fff;
+  border-left: 2px solid #C31014;
+  border-right: 2px solid #C31014;
+}
+#navbar ul.menu li a.selected {
+  background: #fff;
+  border-left: 2px solid #C31014;
+  border-right: 2px solid #C31014;
 }
 #inner-wrap-flash {
   width: 960px;
@@ -450,6 +481,7 @@ body {
   margin: 0 auto;
   *zoom: 1;
   margin-bottom: 22px;
+  margin-top: 22px;
 }
 #inner-wrap-main:before,
 #inner-wrap-main:after {
@@ -470,6 +502,13 @@ body {
   float: left;
   width: 300px;
   margin: 0 10px;
+}
+#sidebar .box {
+  border-bottom: 4px double #C31014;
+  padding-top: 11px;
+  margin-bottom: 51px;
+  padding: 11px;
+  border-left: 4px double #C31014;
 }
 #inner-wrap-triptych {
   width: 960px;
@@ -618,4 +657,4 @@ a:focus {
 .silent {
   color: #999;
 }
-";s:5:"files";a:2:{s:73:"/home/saxon/students/20122/hena12/www/phpmvc/molly/themes/grid/style.less";i:1368180696;s:101:"/home/saxon/students/20122/hena12/www/phpmvc/molly/themes/grid/semantic.gs/stylesheets/less/grid.less";i:1368095875;}s:7:"updated";i:1368180712;}
+";s:5:"files";a:2:{s:73:"/home/saxon/students/20122/hena12/www/phpmvc/molly/themes/grid/style.less";i:1368878692;s:101:"/home/saxon/students/20122/hena12/www/phpmvc/molly/themes/grid/semantic.gs/stylesheets/less/grid.less";i:1368095875;}s:7:"updated";i:1368878695;}

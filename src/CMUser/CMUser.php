@@ -4,7 +4,7 @@
 *
 * @package MollyCore
 */
-class CMUser extends CObject implements IHasSQL, ArrayAccess
+class CMUser extends CObject implements IHasSQL, ArrayAccess, IModule
 {
 		/**
 		* Properties
@@ -24,7 +24,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess
 				
 				if(!$this['isAuthenticated'])
 				{
-						$this['id'] = 1;
+						$this['id'] 		 = 1;
 						$this['acronym'] = 'anonomous';
 				}
 		}
@@ -58,11 +58,58 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess
 		{
 				return isset($this->profile[$offset]) ? $this->profile[$offset] : null;
 		}
+		
+		/**
+		* Implementing interface IModule. Manage install/update/deinstall and equal actions.
+		*
+		* @param string $action what to do.
+		*/
+		public function Manage($action=null)
+		{
+				switch($action)
+				{
+						case 'install':
+								try
+								{
+										$this->db->ExecuteQuery(self::SQL('drop table user2group'));
+										$this->db->ExecuteQuery(self::SQL('drop table group'));
+										$this->db->ExecuteQuery(self::SQL('drop table user'));
+										$this->db->ExecuteQuery(self::SQL('create table user'));
+										$this->db->ExecuteQuery(self::SQL('create table group'));
+										$this->db->ExecuteQuery(self::SQL('create table user2group'));
+										$this->db->ExecuteQuery(self::SQL('insert into user'), array('anonomous', 'Anonomous, not authenticated', null, 'plain', null, null));
+										$password = $this->CreatePassword('root');
+										$this->db->ExecuteQuery(self::SQL('insert into user'), array('root', 'The Administrator', 'root@molly.se', $password['algorithm'], $password['salt'], $password['password']));
+										$idRootUser = $this->db->LastInsertId();
+										$password = $this->CreatePassword('doe');
+										$this->db->ExecuteQuery(self::SQL('insert into user'), array('doe', 'John/Jane Doe', 'doe@molly.se', $password['algorithm'], $password['salt'], $password['password']));
+										$idDoeUser = $this->db->LastInsertId();
+										$this->db->ExecuteQuery(self::SQL('insert into group'), array('admin', 'The Administrator Group'));
+										$idAdminGroup = $this->db->LastInsertId();
+										$this->db->ExecuteQuery(self::SQL('insert into group'), array('user', 'The User Group'));
+										$idUserGroup = $this->db->LastInsertId();
+										$this->db->ExecuteQuery(self::SQL('insert into user2group'), array($idRootUser, $idAdminGroup));
+										$this->db->ExecuteQuery(self::SQL('insert into user2group'), array($idRootUser, $idUserGroup));
+										$this->db->ExecuteQuery(self::SQL('insert into user2group'), array($idDoeUser, $idUserGroup));
+										return array('success', 'Successfully created the database tables and created a default admin user as root:root and an ordinary user as doe:doe.');
+								}
+								catch(Exception$e)
+								{
+										die("$e<br/>Failed to open database: " . $this->config['database'][0]['dsn']);
+								}
+								break;
+      
+						default:
+								throw new Exception('Unsupported action for this module.');
+								break;
+				}
+		}
 
 		/**
 		* Implementing interface IHasSQL. Encapsulate all SQL used by this class.
 		*
 		* @param string $key the string that is the key of the wanted SQL-entry in the array.
+		* @return $queries[$key]
 		*/
 		public static function SQL($key=null)
 		{
@@ -88,48 +135,13 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess
 				}
 				return $queries[$key];
 		}
-
-		/**
-		* Init the database and create appropriate tables.
-		*/
-		public function Init() 
-		{
-				try
-				{
-						$this->db->ExecuteQuery(self::SQL('drop table user2group'));
-						$this->db->ExecuteQuery(self::SQL('drop table group'));
-						$this->db->ExecuteQuery(self::SQL('drop table user'));
-						$this->db->ExecuteQuery(self::SQL('create table user'));
-						$this->db->ExecuteQuery(self::SQL('create table group'));
-						$this->db->ExecuteQuery(self::SQL('create table user2group'));
-						$this->db->ExecuteQuery(self::SQL('insert into user'), array('anonomous', 'Anonomous, not authenticated', null, 'plain', null, null));
-						$password = $this->CreatePassword('root');
-						$this->db->ExecuteQuery(self::SQL('insert into user'), array('root', 'The Administrator', 'root@dbwebb.se', $password['algorithm'], $password['salt'], $password['password']));
-						$idRootUser = $this->db->LastInsertId();
-						$password = $this->CreatePassword('doe');
-						$this->db->ExecuteQuery(self::SQL('insert into user'), array('doe', 'John/Jane Doe', 'doe@dbwebb.se', $password['algorithm'], $password['salt'], $password['password']));
-						$idDoeUser = $this->db->LastInsertId();
-						$this->db->ExecuteQuery(self::SQL('insert into group'), array('admin', 'The Administrator Group'));
-						$idAdminGroup = $this->db->LastInsertId();
-						$this->db->ExecuteQuery(self::SQL('insert into group'), array('user', 'The User Group'));
-						$idUserGroup = $this->db->LastInsertId();
-						$this->db->ExecuteQuery(self::SQL('insert into user2group'), array($idRootUser, $idAdminGroup));
-						$this->db->ExecuteQuery(self::SQL('insert into user2group'), array($idRootUser, $idUserGroup));
-						$this->db->ExecuteQuery(self::SQL('insert into user2group'), array($idDoeUser, $idUserGroup));
-						$this->AddMessage('success', 'Successfully created the database tables and created a default admin user as root:root and an ordinary user as doe:doe.');
-				}
-				catch(Exception$e)
-				{
-						die("$e<br/>Failed to open database: " . $this->config['database'][0]['dsn']);
-				}
-		}
   
 		/**
 		* Login by autenticate the user and password. Store user information in session if success.
 		*
 		* @param string $akronymOrEmail the emailadress or user akronym.
 		* @param string $password the password that should match the akronym or emailadress.
-		* @returns booelan true if match else false.
+		* @return booelan true if match else false.
 		*/
 		public function Login($akronymOrEmail, $password)
 		{
@@ -188,7 +200,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess
 		* @param $password string the password plain text to use as base.
 		* @param $name string the user full name.
 		* @param $email string the user email.
-		* @returns boolean true if user was created or else false and sets failure message in session.
+		* @return boolean true if user was created or else false and sets failure message in session.
 		*/
 		public function Create($acronym, $password, $name, $email)
 		{
@@ -209,7 +221,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess
 		* @param $plain string the password plain text to use as base.
 		* @param $algorithm string stating what algorithm to use, plain, md5, md5salt, sha1, sha1salt.
 		* defaults to the settings of site/config.php.
-		* @returns array with 'salt' and 'password'.
+		* @return array with 'salt' and 'password'.
 		*/
 		public function CreatePassword($plain, $algorithm=null)
 		{
@@ -250,7 +262,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess
 		* @param $algorithm string the algorithm mused to hash the user salt/password.
 		* @param $salt string the user salted string to use to hash the password.
 		* @param $password string the hashed user password that should match.
-		* @returns boolean true if match, else false.
+		* @return boolean true if match, else false.
 		*/
 		public function CheckPassword($plain, $algorithm, $salt, $password)
 		{
@@ -278,7 +290,7 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess
 		/**
 		* Save user profile to database and update user profile in session.
 		*
-		* @returns boolean true if success else false.
+		* @return boolean true if success else false.
 		*/
 		public function Save()
 		{
@@ -290,8 +302,8 @@ class CMUser extends CObject implements IHasSQL, ArrayAccess
 		/**
 		* Change user password.
 		*
-		* @param $password string the new password
-		* @returns boolean true if success else false.
+		* @param $plain string plaintext of the new password
+		* @return boolean true if success else false.
 		*/
 		public function ChangePassword($plain)
 		{

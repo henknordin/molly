@@ -117,11 +117,11 @@ function esc($str)
 }
 
 /**
-* Filter data according to a filter. Uses CMContent::Filter()
+* Filter data according to a filter. Uses CTextFilter
 *
 * @param $data string the data-string to filter.
 * @param $filter string the filter to use.
-* @returns string the filtered string.
+* @return string the filtered string.
 */
 function filter_data($data, $filter)
 {
@@ -133,7 +133,7 @@ function filter_data($data, $filter)
 * Display diff of time between now and a datetime.
 *
 * @param $start datetime|string
-* @returns string
+* @return string
 */
 function time_diff($start)
 {
@@ -157,16 +157,28 @@ function base_url($url=null)
 */
 function create_url($urlOrController=null, $method=null, $arguments=null)
 {
-		return CMolly::Instance()->request->CreateUrl($urlOrController, $method, $arguments);
+		return CMolly::Instance()->CreateUrl($urlOrController, $method, $arguments);
 }
 
 /**
 * Prepend the theme_url, which is the url to the current theme directory.
+* @param $url string the url-part to prepend.
+* @return string the absolute url.
 */
 function theme_url($url)
 {
-		$my = CMolly::Instance();
-		return "{$my->request->base_url}themes/{$my->config['theme']['name']}/{$url}";
+		return create_url(CMolly::Instance()->themeUrl . "/{$url}");
+}
+
+/**
+* Prepend the theme_parent_url, which is the url to the parent theme directory.
+*
+* @param $url string the url-part to prepend.
+* @return string the absolute url.
+*/
+function theme_parent_url($url)
+{
+		return create_url(CMolly::Instance()->themeParentUrl . "/{$url}");
 }
 
 /**
@@ -181,6 +193,7 @@ function current_url()
 * Render all views.
 *
 * @param $region string the region to draw the content in.
+* @return Rendered region
 */
 function render_views($region='default')
 {

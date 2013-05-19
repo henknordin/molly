@@ -1,6 +1,11 @@
 <?php
 use \Michelf\MarkdownExtra;
 
+/**
+* Class for handling text filtering and formattin.
+*
+* @package MollyCore
+*/
 class CTextFilter
 {
 		private $purify = null;
@@ -13,6 +18,12 @@ class CTextFilter
 				;
 		}
 		
+		/**
+		* Method for filter/formatting text
+		* @param $data data to be filtered/formatted.
+		* @param $filter filter/format to be applied.
+		* @return filtered/formatted data
+		*/
 		public function Filter($data, $filter)
 		{
 				foreach ($filter as $value)
@@ -20,21 +31,22 @@ class CTextFilter
 						switch($value)
 						{
 						case 'markdown':
-								$data = $this->markdown($data);
+								$data = nl2br($this->markdown($data));
 								break;
 						case 'make_clickable':
-								$data = $this->make_clickable($data);
+								$data = nl2br($this->make_clickable($data));
 								break;
 						case 'smartypants':
-								$data = $this->smartyPantsTypographer($data);
+								$data = nl2br($this->smartyPantsTypographer($data));
 								break;
 						case 'bbcode':
-								$data = $this->bbcode2html($data);
+								$data = nl2br($this->bbcode2html($data));
 								break;
 						case 'htmlpurify':
-								$data = $this->Purify($data);
+								$data = nl2br($this->Purify($data));
 								break;
 						default:
+								$data = nl2br($this->make_clickable($data));
 								break;
 						}
 				}
@@ -45,7 +57,7 @@ class CTextFilter
     /**
 		* Format text according to Markdown syntax.
 		*
-		* @param string $text the text that should be formatted.
+		* @param $string the text that should be formatted.
 		* @return string as the formatted html-text.
 		*/
     private function markdown($text)
@@ -58,7 +70,7 @@ class CTextFilter
     /**
     * Make clickable links from URLs in text.
     *
-    * @param string $text the text that should be formatted.
+    * @param $text the text that should be formatted.
     * @return string with formatted anchors.
     */
     private function make_clickable($text)
@@ -76,7 +88,7 @@ class CTextFilter
     /**
     * Format text according to PHP SmartyPants Typographer.
     *
-    * @param string $text the text that should be formatted.
+    * @param $text the text that should be formatted.
     * @return string as the formatted html-text.
     */
     private function smartyPantsTypographer($text)
@@ -88,8 +100,8 @@ class CTextFilter
     /**
     * Helper, BBCode formatting converting to HTML.
     *
-    * @param string text The text to be converted.
-    * @returns string the formatted text.
+    * @param $text The text to be converted.
+    * @return string the formatted text.
     */
     private function bbcode2html($text)
     {
@@ -116,12 +128,12 @@ class CTextFilter
     * Purify it. Create an instance of HTMLPurifier if it does not exists.
     *
     * @param $text string the dirty HTML.
-    * @returns string as the clean HTML.
+    * @return string as the clean HTML.
     */
     private function Purify($text)
     {   
     		
-    		if(!$purify)
+    		if(!isset($purify))
     		{
     				require_once(__DIR__.'/htmlpurifier-4.5.0-standalone/HTMLPurifier.standalone.php');
     				$config = HTMLPurifier_Config::createDefault();
